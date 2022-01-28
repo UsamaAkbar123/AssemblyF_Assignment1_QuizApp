@@ -25,7 +25,8 @@ class ScoreScreen extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          height: size.height * 0.90,
+          margin:MediaQuery.of(context).orientation == Orientation.portrait ? const EdgeInsets.symmetric(horizontal: 10,vertical: 0) : const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+          height:MediaQuery.of(context).orientation == Orientation.portrait ? size.height * 0.90 : size.height * 0.95 ,
           width: size.width * 0.90,
           decoration: const BoxDecoration(
             color: Colors.lightGreen,
@@ -33,7 +34,8 @@ class ScoreScreen extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: Container(
-            height: size.height * 0.65,
+            // height: size.height * 0.65,
+            height: MediaQuery.of(context).orientation == Orientation.portrait ? size.height * 0.65 : size.height * 0.60,
             width: size.width * 0.70,
             // constraints:  BoxConstraints(
             //   maxHeight: size.height * 0.65,

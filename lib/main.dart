@@ -36,6 +36,8 @@ class ListOfQuiz extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -50,7 +52,7 @@ class ListOfQuiz extends StatelessWidget {
           itemCount: 10,
           itemBuilder: (context, index) {
             return Container(
-              margin: const EdgeInsets.all(10.0),
+              margin: MediaQuery.of(context).orientation == Orientation.portrait ? const EdgeInsets.all(10.0) : EdgeInsets.symmetric(horizontal: size.width * 0.3,vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(20.0),
