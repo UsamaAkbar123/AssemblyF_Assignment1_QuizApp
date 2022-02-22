@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_app_assignment/controller/question_controller.dart';
+import 'package:quiz_app_assignment/models/quiz_model.dart';
 import 'package:quiz_app_assignment/models/quiz_question.dart';
 import 'package:quiz_app_assignment/screens/score_screen.dart';
 
@@ -22,6 +23,42 @@ class _QuizQuestionState extends State<QuizQuestion> {
   PageController pageController = PageController();
   bool showButton = false;
   int _selectedIndex = -1;
+
+
+  List<QuizModel> allQuiz = [];
+  List<Answers> answerList = [];
+  getAllQuiz() async {
+    try {
+      List<QuizModel> _allQuiz = await QuestionController().getQuiz();
+      setState(() {
+        allQuiz = _allQuiz;
+      });
+      for(int i=0 ; i< allQuiz.length ; i++){
+        answerList.add(allQuiz[i].answers!);
+      }
+      debugPrint(answerList[0].toString());
+    } catch (e) {
+      displayErrorDialog(context, content: e.toString());
+    }
+  }
+
+  displayErrorDialog(BuildContext context, {required String content}) {
+  showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title:const Text("Error Occured"),
+          content: Text(content),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child:const Text("Ok"))
+          ],
+        );
+      });
+}
 
   void setSelectedIndex(int selectedIndex) {
     setState(() {
@@ -45,6 +82,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
   @override
   void initState() {
     getQuizIndexQuestion();
+    getAllQuiz();
     super.initState();
   }
 
@@ -109,7 +147,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
       ),
       body: PageView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: filter_question_list.length,
+        itemCount: allQuiz.length,
         controller: pageController,
         itemBuilder: (context, index) {
           return Column(
@@ -127,7 +165,8 @@ class _QuizQuestionState extends State<QuizQuestion> {
                   color: const Color(0xff333333),
                 ),
                 child: Text(
-                  filter_question_list[index]['questionText'],
+                  // filter_question_list[index]['questionText'],
+                  allQuiz[index].question.toString(),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
@@ -170,8 +209,9 @@ class _QuizQuestionState extends State<QuizQuestion> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            filter_question_list[index]['answers'][index1]
-                                ['answerText'],
+                            // filter_question_list[index]['answers'][index1]
+                            //     ['answerText'],
+                            allQuiz[index].answers!.answerA.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w400,
@@ -205,7 +245,9 @@ class _QuizQuestionState extends State<QuizQuestion> {
                             },
                             fillColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.white),
-                          )
+                          ),
+                          
+
                         ],
                       ),
                     );
